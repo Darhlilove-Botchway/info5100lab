@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package app_ui;
+package view;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -388,13 +388,6 @@ public class MainJFrame extends javax.swing.JFrame {
             phone_formatted = this.phoneFormattedText.getText().replaceAll(" ", "");
             age = Integer.parseInt(this.ageSpinner.getModel().getValue().toString());
             
-            if (firstName != null && !firstName.isEmpty()) {
-                String firstChar = firstName.substring(0, 1); // Safe to extract the first character
-                System.out.println("First character: " + firstChar);
-            } else {
-                System.out.println("First name is empty or null.");
-            }
-            
             // Check if first name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-" and "."
             if (firstName.isBlank() || firstName.toLowerCase().replaceAll("[a-z\\-.]", "").length() != 0) {
                 JOptionPane.showMessageDialog(rootPane, "Please enter a valid first name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
@@ -462,6 +455,8 @@ public class MainJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, confirmationMessage, "Account created!", HEIGHT, this.submittedPhoto.getIcon());            
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(rootPane, "Please select your gender", "Selection Error!", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Something went wrong!", "Ooops!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_submitButtonActionPerformed
 
