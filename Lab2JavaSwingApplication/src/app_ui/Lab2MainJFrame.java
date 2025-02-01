@@ -388,14 +388,14 @@ public class Lab2MainJFrame extends javax.swing.JFrame {
             phone_formatted = this.phoneFormattedText.getText().replaceAll(" ", "");
             age = Integer.parseInt(this.ageSpinner.getModel().getValue().toString());
             
-            // Check if first name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-" and "."
-            if (firstName.isBlank() || firstName.toLowerCase().replaceAll("[a-z\\-.]", "").length() != 0) {
+            // Check if first name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-. "
+            if (firstName.isBlank() || firstName.replaceAll("[a-z\\-. ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(rootPane, "Please enter a valid first name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            // Check if last name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-" and "."
-            if (lastName.isBlank() || lastName.toLowerCase().replaceAll("[a-z\\-.]", "").length() != 0) {
+            // Check if last name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-. "
+            if (lastName.isBlank() || lastName.replaceAll("[a-z\\-. ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(rootPane, "Please enter a valid last name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -471,7 +471,7 @@ public class Lab2MainJFrame extends javax.swing.JFrame {
             try {
                 BufferedImage img = ImageIO.read(file.getSelectedFile());
                 Image edited_image;
-                edited_image = img.getScaledInstance(60, 80, Image.SCALE_SMOOTH);
+                edited_image = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
                 if (edited_image != null) {
                     this.submittedPhoto.setIcon(new ImageIcon(edited_image));
                 }
