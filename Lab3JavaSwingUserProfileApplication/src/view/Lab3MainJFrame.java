@@ -344,7 +344,7 @@ public class Lab3MainJFrame extends javax.swing.JFrame {
             // Initializing object of class User
             User userObject = new User();            
             
-            // Initialising variables
+            // Initialising userObject variables
             userObject.setFirstName(this.firstNameTextField.getText().trim().toLowerCase());
             userObject.setFirstNameProperCase();
             userObject.setLastName(this.lastNameTextField.getText().trim().toLowerCase());
@@ -354,16 +354,16 @@ public class Lab3MainJFrame extends javax.swing.JFrame {
             userObject.setPhoneFormatted(this.phoneFormattedText.getText().replaceAll(" ", ""));
             userObject.setPhoneUnformatted();
             userObject.setAge(Integer.parseInt(this.ageSpinner.getModel().getValue().toString()));
-            userObject.setHobby(this.hobbyTextArea.getText());
+            userObject.setHobby(this.hobbyTextArea.getText().trim().replaceAll("\\s+|\n", " "));
             
             // Check if first name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-" and "."
-            if (userObject.getFirstName().isBlank() || userObject.getFirstName().toLowerCase().replaceAll("[a-z\\-.]", "").length() != 0) {
+            if (userObject.getFirstName().isBlank() || userObject.getFirstName().replaceAll("[a-z\\-. ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(rootPane, "Please enter a valid first name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             // Check if last name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-."
-            if (userObject.getLastName().isBlank() || userObject.getLastName().toLowerCase().replaceAll("[a-z\\-.]", "").length() != 0) {
+            if (userObject.getLastName().isBlank() || userObject.getLastName().replaceAll("[a-z\\-. ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(rootPane, "Please enter a valid last name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -402,8 +402,8 @@ public class Lab3MainJFrame extends javax.swing.JFrame {
                 return;
             } 
             
-            // Check if hobby is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-.():"
-            if (userObject.getHobby().isBlank() || userObject.getHobby().toLowerCase().replaceAll("[a-z\\-.():]", "").length() != 0) {
+            // Check if hobby is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-.():\n"
+            if (userObject.getHobby().isBlank() || userObject.getHobby().toLowerCase().replaceAll("[a-z\\-.,():\n ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(rootPane, "Please enter a valid hobby.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -413,8 +413,9 @@ public class Lab3MainJFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Please upload an image.", "Error - No image", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            JOptionPane.showMessageDialog(rootPane, userObject.toString(), "Account created!", HEIGHT, this.submittedPhoto.getIcon());           
+            
+            JOptionPane.showMessageDialog(rootPane, userObject.toString(), "Account created!", HEIGHT, this.submittedPhoto.getIcon());        
+            
         } catch (NullPointerException ne) {
             JOptionPane.showMessageDialog(rootPane, "Please select your gender", "Selection Error!", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
@@ -424,21 +425,20 @@ public class Lab3MainJFrame extends javax.swing.JFrame {
 
     private void photoChooserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_photoChooserButtonActionPerformed
         // TODO add your handling code here:
+        // Initializing object of class User
+        User userObject = new User(); 
+        
         JFileChooser file = new JFileChooser();
         
         FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image Files (JPG, JPEG, PNG, GIF)", "jpg", "jpeg", "png", "gif");
         file.setFileFilter(imageFilter);
         
         if (file.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-            try {
-                BufferedImage img = ImageIO.read(file.getSelectedFile());
-                Image edited_image;
-                edited_image = img.getScaledInstance(60, 80, Image.SCALE_SMOOTH);
-                if (edited_image != null) {
-                    this.submittedPhoto.setIcon(new ImageIcon(edited_image));
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Please upload image correctly.", "Error - Incorrect image", JOptionPane.ERROR_MESSAGE);
+            userObject.setProfilePhoto(file.getSelectedFile());
+            Image edited_image;
+            edited_image = userObject.getProfilePhoto().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+            if (edited_image != null) {
+                this.submittedPhoto.setIcon(new ImageIcon(edited_image));
             }
         }
     }//GEN-LAST:event_photoChooserButtonActionPerformed

@@ -4,9 +4,14 @@
  */
 package model;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 /**
  *
- * @author nana
+ * @author Darhlilove Botchway
  */
 public class User {
     private String firstName;
@@ -15,10 +20,11 @@ public class User {
     private String lastNameProperCase;
     private String gender;
     private String email;
-    private String phone_unformatted;
-    private String phone_formatted;
+    private String phoneUnformatted;
+    private String phoneFormatted;
     private String hobby;
     private int age;
+    private BufferedImage profilePhoto;
     
     public String getFirstName () {
     return firstName;
@@ -69,19 +75,19 @@ public class User {
     }
     
     public String getPhoneUnformatted () {
-        return phone_unformatted;
+        return phoneUnformatted;
     }
     
     public void setPhoneUnformatted () {
-        this.phone_unformatted = phone_formatted.replaceAll("[^0-9]", "");
+        this.phoneUnformatted = phoneFormatted.replaceAll("[^0-9]", "");
     }
     
     public String getPhoneFormatted () {
-        return phone_formatted;
+        return phoneFormatted;
     }
     
-    public void setPhoneFormatted (String phone_formatted) {
-        this.phone_formatted = phone_formatted;
+    public void setPhoneFormatted (String phoneFormatted) {
+        this.phoneFormatted = phoneFormatted;
     }
     
     public String getHobby () {
@@ -100,6 +106,20 @@ public class User {
         this.age = age;
     }
 
+    public BufferedImage getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(File image) {
+        try {
+            this.profilePhoto = ImageIO.read(image);
+        } catch (IOException e) {
+            e.getMessage();
+        }
+    }
+    
+    
+
     @Override
     public String toString() {
         return "User Profile Information \n \n First name:"
@@ -107,8 +127,9 @@ public class User {
                     + "\n Last name: " + lastNameProperCase
                     + "\n Gender: " + gender
                     + "\n Age: " + age
-                    + "\n Phone: " + phone_formatted
-                    + "\n Email: " + email;
+                    + "\n Phone: " + phoneFormatted
+                    + "\n Email: " + email
+                    + "\n Hobbies: " + hobby.replaceAll("\\s+", " ");
     }
     
     
