@@ -132,5 +132,4 @@ public class User {
                     + "\n Hobbies: " + hobby.replaceAll("\\s+", " ");
     }
     
-    
 }
