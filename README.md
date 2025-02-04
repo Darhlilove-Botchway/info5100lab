@@ -1,1 +1,3 @@
-# info5100lab
+# INFO5100
+
+Application Engineering and Development
