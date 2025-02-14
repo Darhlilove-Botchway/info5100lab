@@ -381,14 +381,13 @@ public class FormJPanel extends javax.swing.JPanel {
                 .addComponent(submittedPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
         
-                
         try {
             // Initializing object of class User
             User userObject = new User();
@@ -525,7 +524,7 @@ public class FormJPanel extends javax.swing.JPanel {
         if (file.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             try {
             BufferedImage img = ImageIO.read(file.getSelectedFile());
-            Image edited_image = img.getScaledInstance(60, 80, Image.SCALE_SMOOTH);
+            Image edited_image = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
             
             if (edited_image != null) {
                 photoSelectedLabel.setText(file.getSelectedFile().getAbsolutePath());
