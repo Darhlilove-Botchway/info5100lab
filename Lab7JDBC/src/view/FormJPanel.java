@@ -5,12 +5,14 @@
 package view;
 
 import java.awt.CardLayout;
-import java.time.LocalDate;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import model.User;
 import utility.DatabaseConnector;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 /**
  *
@@ -32,21 +34,21 @@ public class FormJPanel extends javax.swing.JPanel {
         this.bottomPanel = bottomPanel;
     }
 
-    public static int calculateAge(Date date) {
-            LocalDate birthDay;
-            LocalDate today;
-            int age;
-            int monthDifference;
 
-            birthDay = date.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-            today = LocalDate.now();
-            age = today.getYear() - birthDay.getYear();
-            monthDifference = today.getMonthValue() - birthDay.getMonthValue();
+    public static int calculateAgeFromString(String dobString) {
+        // Define formatter for MM-DD-YYYY format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
-            if(monthDifference < 0 || (monthDifference == 0 && today.getDayOfMonth() < birthDay.getDayOfMonth())){
-                age--;
-            }
-            return age;
+        // Convert string to LocalDate
+        LocalDate birthDate = LocalDate.parse(dobString, formatter);
+
+        // Calculate age
+        return calculateAge(birthDate);
+    }
+
+    public static int calculateAge(LocalDate birthDate) {
+        LocalDate today = LocalDate.now();
+        return (int) ChronoUnit.YEARS.between(birthDate, today);
     }
     
     /**
@@ -77,7 +79,7 @@ public class FormJPanel extends javax.swing.JPanel {
         genderComboBox = new javax.swing.JComboBox<>();
         phoneLabel = new javax.swing.JLabel();
         emailTextField = new javax.swing.JTextField();
-        dateOfBirthDateChooser = new com.toedter.calendar.JDateChooser();
+        dateOfBirthFormattedText = new javax.swing.JFormattedTextField();
 
         setBackground(new java.awt.Color(17, 7, 85));
         setPreferredSize(new java.awt.Dimension(1000, 620));
@@ -232,13 +234,26 @@ public class FormJPanel extends javax.swing.JPanel {
         emailTextField.setSelectedTextColor(new java.awt.Color(0, 0, 0));
         emailTextField.setSelectionColor(new java.awt.Color(63, 58, 118));
 
-        dateOfBirthDateChooser.setBackground(new java.awt.Color(63, 58, 118));
-        dateOfBirthDateChooser.setForeground(new java.awt.Color(255, 255, 255));
-        dateOfBirthDateChooser.setToolTipText("Please select your date of birth");
-        dateOfBirthDateChooser.setDateFormatString("MMMM dd, yyyy");
-        dateOfBirthDateChooser.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
-        dateOfBirthDateChooser.setMaxSelectableDate(new java.util.Date(1740808867000L));
-        dateOfBirthDateChooser.setMinSelectableDate(new java.util.Date(-2208967133000L));
+        dateOfBirthFormattedText.setBackground(new java.awt.Color(63, 58, 118));
+        dateOfBirthFormattedText.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(63, 58, 118), 5));
+        dateOfBirthFormattedText.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            dateOfBirthFormattedText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        dateOfBirthFormattedText.setText("  -  -    ");
+        dateOfBirthFormattedText.setToolTipText("mm-dd-yyyy");
+        dateOfBirthFormattedText.setActionCommand("phone");
+        dateOfBirthFormattedText.setCaretColor(new java.awt.Color(255, 255, 255));
+        dateOfBirthFormattedText.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
+        dateOfBirthFormattedText.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        dateOfBirthFormattedText.setSelectionColor(new java.awt.Color(153, 153, 255));
+        dateOfBirthFormattedText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateOfBirthFormattedTextActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -282,8 +297,8 @@ public class FormJPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(submittedPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dateOfBirthDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(373, Short.MAX_VALUE))
+                                    .addComponent(dateOfBirthFormattedText))))))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,11 +333,11 @@ public class FormJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(emailLabel1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dateOfBirthDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateOfBirthLabel))
-                .addGap(28, 28, 28)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dateOfBirthLabel)
+                    .addComponent(dateOfBirthFormattedText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
                 .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(submittedPhoto, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -338,43 +353,39 @@ public class FormJPanel extends javax.swing.JPanel {
             User userObject = new User();
 
             // Initialising userObject variables
-            userObject.setFirstName(this.firstNameTextField.getText().trim().toLowerCase());
-            userObject.setLastName(this.lastNameTextField.getText().trim().toLowerCase());
-            userObject.setFirstNameProperCase();
-            userObject.setLastNameProperCase();
+            userObject.setFirstName(this.firstNameTextField.getText().trim());
+            userObject.setLastName(this.lastNameTextField.getText().trim());
             userObject.setGender(this.genderComboBox.getSelectedItem().toString());
             userObject.setEmail(this.emailTextField.getText().trim());
             userObject.setPhoneFormatted(this.phoneFormattedText.getText());
             userObject.setPhoneUnformatted();
             userObject.setAge(Integer.parseInt(this.ageSpinner.getModel().getValue().toString()));
             userObject.setHobby(this.hobbyTextArea.getText().trim().replaceAll("\\s+|\n", " "));
-            userObject.setDateOfBirth(this.dateOfBirthDateChooser.getDate());
-            
-            // Parsing and initialising string date of birth
-            Date selectedDate = this.dateOfBirthDateChooser.getDate();
-            LocalDate localDate = selectedDate.toInstant()
-                                           .atZone(java.time.ZoneId.systemDefault())
-                                           .toLocalDate();
-            String parsedDate = localDate.getMonth().name().substring(0,1) + localDate.getMonth().name().substring(1).toLowerCase() 
-                                        + " " + localDate.getDayOfMonth() + ", "+ localDate.getYear();
-            userObject.setDateOfBirthString(parsedDate);
-            
+            userObject.setDateOfBirth(this.dateOfBirthFormattedText.getText());
 
             // Check if first name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-" and "."
-            if (userObject.getFirstName().isBlank() || userObject.getFirstName().replaceAll("[a-z\\-. ]", "").length() != 0) {
+            if (userObject.getFirstName().isBlank() || userObject.getFirstName().replaceAll("[A-Za-z\\-. ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid first name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if first name is more than 25 characters
+            if (userObject.getFirstName().length() > 25) {
+                JOptionPane.showMessageDialog(this, "The first name you have provided is more than 25 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Check if last name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-."
-            if (userObject.getLastName().isBlank() || userObject.getLastName().replaceAll("[a-z\\-. ]", "").length() != 0) {
+            if (userObject.getLastName().isBlank() || userObject.getLastName().replaceAll("[A-Za-z\\-. ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid last name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            // Initialise Proper case for first and last name after verifying input 
-             userObject.setFirstNameProperCase();
-             userObject.setLastNameProperCase();
+            // Check if last name is more than 25 characters
+            if (userObject.getLastName().length() > 25) {
+                JOptionPane.showMessageDialog(this, "The last name you have provided is more than 25 characters.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Check if age is greater than 0
             if (userObject.getAge() <= 0) {
@@ -385,6 +396,12 @@ public class FormJPanel extends javax.swing.JPanel {
             // Check if phone is less than 10 digits long OR phone begins with 0
             if (userObject.getPhoneUnformatted().length() < 10 || userObject.getPhoneUnformatted().indexOf("0") == 0) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid phone number.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if phone number is more than 10 characters
+            if (userObject.getPhoneUnformatted().length() > 10) {
+                JOptionPane.showMessageDialog(this, "The phone number you have provided is more than 10 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -409,10 +426,22 @@ public class FormJPanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Please enter a valid email.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            
+            // Check if email is more than 50 characters
+            if (userObject.getEmail().length() > 50) {
+                JOptionPane.showMessageDialog(this, "The email you have provided is more than 50 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Check if hobby is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-.():\n"
             if (userObject.getHobby().isBlank() || userObject.getHobby().toLowerCase().replaceAll("[a-z\\-.,():\n ]", "").length() != 0) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid hobby.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if hobby is more than 100 characters
+            if (userObject.getHobby().length() > 100) {
+                JOptionPane.showMessageDialog(this, "The hobbies you have provided are more than 100 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -423,7 +452,7 @@ public class FormJPanel extends javax.swing.JPanel {
             }
             
             // Check if date selected matches age
-            if (calculateAge(userObject.getDateOfBirth()) != userObject.getAge()){
+            if (calculateAgeFromString(userObject.getDateOfBirth()) != userObject.getAge()){
                 JOptionPane.showMessageDialog(this, "Your age does not match your date of birth", "Input Error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -457,11 +486,15 @@ public class FormJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_phoneFormattedTextActionPerformed
 
+    private void dateOfBirthFormattedTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateOfBirthFormattedTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateOfBirthFormattedTextActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ageLabel;
     private javax.swing.JSpinner ageSpinner;
-    private com.toedter.calendar.JDateChooser dateOfBirthDateChooser;
+    private javax.swing.JFormattedTextField dateOfBirthFormattedText;
     private javax.swing.JLabel dateOfBirthLabel;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel emailLabel1;

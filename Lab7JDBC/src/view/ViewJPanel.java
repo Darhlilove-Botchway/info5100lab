@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.User;
 import utility.DatabaseConnector;
+import static view.FormJPanel.calculateAgeFromString;
 
 /**
  *
@@ -37,7 +38,7 @@ public class ViewJPanel extends javax.swing.JPanel {
         this.phoneFormattedText.setText(userObject.getPhoneFormatted());
         this.emailTextField.setText(userObject.getEmail());
         this.hobbyTextArea.setText(userObject.getHobby());
-        this.dateOfBirthTextField.setText(userObject.getDateOfBirthString());
+        this.dateOfBirthFormattedText.setText(userObject.getDateOfBirth());
     }
     
     public final void clearAllFields(){
@@ -48,7 +49,7 @@ public class ViewJPanel extends javax.swing.JPanel {
         this.phoneFormattedText.setText(null);
         this.emailTextField.setText(null);
         this.hobbyTextArea.setText(null);
-        this.dateOfBirthTextField.setText(null);
+        this.dateOfBirthFormattedText.setText(null);
     }
     
     public void toggleFormEnableProperty(Boolean b) {
@@ -58,7 +59,7 @@ public class ViewJPanel extends javax.swing.JPanel {
         this.emailTextField.setEnabled(b);
         this.phoneFormattedText.setEnabled(b);
         this.ageSpinner.setEnabled(b);
-        this.dateOfBirthTextField.setEnabled(b);
+        this.dateOfBirthFormattedText.setEnabled(b);
         this.hobbyTextArea.setEnabled(b);
     };
 
@@ -77,7 +78,7 @@ public class ViewJPanel extends javax.swing.JPanel {
             row[4] = u.getEmail();
             row[5] = u.getPhoneFormatted();
             row[6] = u.getAge();
-            row[7] = u.getDateOfBirthString();
+            row[7] = u.getDateOfBirth();
             row[8] = u.getHobby();
             model.addRow(row);
         }
@@ -110,12 +111,12 @@ public class ViewJPanel extends javax.swing.JPanel {
         genderComboBox = new javax.swing.JComboBox<>();
         phoneLabel = new javax.swing.JLabel();
         DateOfBirthLabel = new javax.swing.JLabel();
-        dateOfBirthTextField = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         studentsJTable = new javax.swing.JTable();
         editButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
+        dateOfBirthFormattedText = new javax.swing.JFormattedTextField();
 
         setBackground(new java.awt.Color(17, 7, 85));
         setPreferredSize(new java.awt.Dimension(1000, 620));
@@ -253,17 +254,6 @@ public class ViewJPanel extends javax.swing.JPanel {
         DateOfBirthLabel.setText("Date of Birth:");
         DateOfBirthLabel.setToolTipText("Please select a photo for your profile using the button provided");
 
-        dateOfBirthTextField.setBackground(new java.awt.Color(63, 58, 118));
-        dateOfBirthTextField.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
-        dateOfBirthTextField.setForeground(new java.awt.Color(255, 255, 255));
-        dateOfBirthTextField.setToolTipText("Please enter your email");
-        dateOfBirthTextField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(63, 58, 118), 5));
-        dateOfBirthTextField.setCaretColor(new java.awt.Color(255, 255, 255));
-        dateOfBirthTextField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        dateOfBirthTextField.setEnabled(false);
-        dateOfBirthTextField.setSelectedTextColor(new java.awt.Color(0, 0, 0));
-        dateOfBirthTextField.setSelectionColor(new java.awt.Color(63, 58, 118));
-
         studentsJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
@@ -337,6 +327,28 @@ public class ViewJPanel extends javax.swing.JPanel {
             }
         });
 
+        dateOfBirthFormattedText.setBackground(new java.awt.Color(63, 58, 118));
+        dateOfBirthFormattedText.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(63, 58, 118), 5));
+        dateOfBirthFormattedText.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            dateOfBirthFormattedText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##-##-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        dateOfBirthFormattedText.setText("  -  -    ");
+        dateOfBirthFormattedText.setToolTipText("mm-dd-yyyy");
+        dateOfBirthFormattedText.setActionCommand("phone");
+        dateOfBirthFormattedText.setCaretColor(new java.awt.Color(255, 255, 255));
+        dateOfBirthFormattedText.setEnabled(false);
+        dateOfBirthFormattedText.setFont(new java.awt.Font("Cantarell", 0, 18)); // NOI18N
+        dateOfBirthFormattedText.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        dateOfBirthFormattedText.setSelectionColor(new java.awt.Color(153, 153, 255));
+        dateOfBirthFormattedText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateOfBirthFormattedTextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -352,36 +364,36 @@ public class ViewJPanel extends javax.swing.JPanel {
                     .addComponent(emailLabel)
                     .addComponent(hobbiesLabel)
                     .addComponent(DateOfBirthLabel))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(userRegistrationFormTitle)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lastNameTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(genderComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(ageSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jScrollPane1)
                                 .addComponent(phoneFormattedText)
-                                .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(dateOfBirthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(emailTextField)
+                                .addComponent(dateOfBirthFormattedText, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addGap(33, 33, 33))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(userRegistrationFormTitle)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(genderComboBox, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(firstNameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                                .addComponent(lastNameTextField, javax.swing.GroupLayout.Alignment.TRAILING)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(208, 208, 208))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(197, 197, 197)
+                        .addGap(287, 287, 287)
                         .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(91, 91, 91)
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 831, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(208, 208, 208))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,12 +440,12 @@ public class ViewJPanel extends javax.swing.JPanel {
                             .addComponent(hobbiesLabel)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dateOfBirthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DateOfBirthLabel))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DateOfBirthLabel)
+                            .addComponent(dateOfBirthFormattedText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -477,21 +489,115 @@ public class ViewJPanel extends javax.swing.JPanel {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         // TODO add your handling code here:
-        User updatedUser = new User();
-        updatedUser.setFirstName(this.firstNameTextField.getText());
-        updatedUser.setFirstNameProperCase();
-        updatedUser.setLastName(this.lastNameTextField.getText());
-        updatedUser.setLastNameProperCase();
-        updatedUser.setGender(this.genderComboBox.getSelectedItem().toString());
-        updatedUser.setEmail(this.emailTextField.getText().trim());
-        updatedUser.setPhoneFormatted(this.phoneFormattedText.getText());
-        updatedUser.setPhoneUnformatted();
-        updatedUser.setAge(Integer.parseInt(this.ageSpinner.getModel().getValue().toString()));
-        updatedUser.setHobby(this.hobbyTextArea.getText().trim().replaceAll("\\s+|\n", " "));
-        updatedUser.setDateOfBirthString(this.dateOfBirthTextField.getText());
         
         try {
-            String studentFirstName = userObject.getFirstName();
+            // Initialising userObject variables
+            User updatedUser = new User();
+            updatedUser.setFirstName(this.firstNameTextField.getText().trim());
+            updatedUser.setLastName(this.lastNameTextField.getText().trim());
+            updatedUser.setGender(this.genderComboBox.getSelectedItem().toString());
+            updatedUser.setEmail(this.emailTextField.getText().trim());
+            updatedUser.setPhoneFormatted(this.phoneFormattedText.getText());
+            updatedUser.setPhoneUnformatted();
+            updatedUser.setAge(Integer.parseInt(this.ageSpinner.getModel().getValue().toString()));
+            updatedUser.setHobby(this.hobbyTextArea.getText().trim().replaceAll("\\s+|\n", " "));
+            updatedUser.setDateOfBirth(this.dateOfBirthFormattedText.getText());
+
+            // Check if first name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-" and "."
+            if (updatedUser.getFirstName().isBlank() || updatedUser.getFirstName().replaceAll("[A-Za-z\\-. ]", "").length() != 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid first name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if first name is more than 25 characters
+            if (updatedUser.getFirstName().length() > 25) {
+                JOptionPane.showMessageDialog(this, "The first name you have provided is more than 25 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if last name is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-."
+            if (updatedUser.getLastName().isBlank() || updatedUser.getLastName().replaceAll("[A-Za-z\\-. ]", "").length() != 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid last name.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if last name is more than 25 characters
+            if (updatedUser.getLastName().length() > 25) {
+                JOptionPane.showMessageDialog(this, "The last name you have provided is more than 25 characters.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if age is greater than 0
+            if (updatedUser.getAge() <= 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid age.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if phone is less than 10 digits long OR phone begins with 0
+            if (updatedUser.getPhoneUnformatted().length() < 10 || updatedUser.getPhoneUnformatted().indexOf("0") == 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid phone number.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if phone number is more than 10 characters
+            if (updatedUser.getPhoneUnformatted().length() > 10) {
+                JOptionPane.showMessageDialog(this, "The phone number you have provided is more than 10 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if email is blank or contains no text or just whitespaces
+            // OR email does not contain "@" or contains more than one "@" or beigns with "@"
+            // OR the text after "@" does not contain "."
+            // OR there is no text before "@"
+            // OR there is no text between "@" and "."
+            // OR there is no text after "."
+            // OR the length of email is less than 6 characters
+            if (
+                updatedUser.getEmail().isBlank() ||                        // Email cannot be blank
+                !updatedUser.getEmail().contains("@") ||                   // Must contain an '@'
+                updatedUser.getEmail().indexOf("@") == 0 ||                // '@' cannot be the first character
+                updatedUser.getEmail().lastIndexOf("@") != updatedUser.getEmail().indexOf("@") ||  // Multiple '@' are not allowed
+                updatedUser.getEmail().indexOf("@") == updatedUser.getEmail().length() - 1 ||  // '@' cannot be the last character
+                updatedUser.getEmail().indexOf(".", updatedUser.getEmail().indexOf("@")) == -1 ||  // '.' must exist after '@'
+                updatedUser.getEmail().indexOf(".", updatedUser.getEmail().indexOf("@")) == updatedUser.getEmail().indexOf("@") + 1 ||  // '.' cannot immediately follow '@'
+                updatedUser.getEmail().substring(updatedUser.getEmail().lastIndexOf(".") + 1).trim().length() < 2 ||  // Text after '.' must be at least 2 characters
+                updatedUser.getEmail().length() < 6                        // Minimum length check
+            ) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid email.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if email is more than 50 characters
+            if (updatedUser.getEmail().length() > 50) {
+                JOptionPane.showMessageDialog(this, "The email you have provided is more than 50 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if hobby is not blank or contains no text or just whitespaces OR contains other characters aside letters and "-.():\n"
+            if (updatedUser.getHobby().isBlank() || updatedUser.getHobby().toLowerCase().replaceAll("[a-z\\-.,():\n ]", "").length() != 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid hobby.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if hobby is more than 100 characters
+            if (updatedUser.getHobby().length() > 100) {
+                JOptionPane.showMessageDialog(this, "The hobbies you have provided are more than 100 characters long.", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if date is selected OR date selected matches age
+            if (updatedUser.getDateOfBirth() == null){
+                JOptionPane.showMessageDialog(this, "Please enter your date of birth", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Check if date selected matches age
+            if (calculateAgeFromString(updatedUser.getDateOfBirth()) != updatedUser.getAge()){
+                JOptionPane.showMessageDialog(this, "Your age does not match your date of birth", "Input Error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            String studentFirstName = updatedUser.getFirstName();
             DatabaseConnector.updateUser(userObject, updatedUser);
             
             JOptionPane.showMessageDialog(this, studentFirstName + "'s information has been updated successfully", "Success!", JOptionPane.INFORMATION_MESSAGE);
@@ -500,15 +606,23 @@ public class ViewJPanel extends javax.swing.JPanel {
             toggleFormEnableProperty(false);
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(this, "Something went wrong!", "Ooops!", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException ne) {
+            JOptionPane.showMessageDialog(this, "Please provide valid responses for all the fields", "Input Error!", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Something went wrong!", "Ooops!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void dateOfBirthFormattedTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateOfBirthFormattedTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateOfBirthFormattedTextActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel DateOfBirthLabel;
     private javax.swing.JLabel ageLabel;
     private javax.swing.JSpinner ageSpinner;
-    private javax.swing.JTextField dateOfBirthTextField;
+    private javax.swing.JFormattedTextField dateOfBirthFormattedText;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JLabel emailLabel;

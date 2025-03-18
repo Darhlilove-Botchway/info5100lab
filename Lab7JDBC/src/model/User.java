@@ -4,8 +4,6 @@
  */
 package model;
 
-import java.util.Date;
-
 /**
  *
  * @author Darhlilove Botchway
@@ -13,12 +11,9 @@ import java.util.Date;
 public class User {
     private int userId;
     private String firstName;
-    private String firstNameProperCase;
     private String lastName;
-    private String lastNameProperCase;
     private String gender;
-    private String dateOfBirthString;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String email;
     private String phoneUnformatted;
     private String phoneFormatted;
@@ -41,14 +36,6 @@ public class User {
         this.firstName = firstName;
     }
     
-    public String getFirstNameProperCase () {
-    return firstNameProperCase;
-    }
-    
-    public void setFirstNameProperCase () {
-        this.firstNameProperCase = firstName.substring(0,1).toUpperCase() + firstName.substring(1);
-    }
-    
         public String getLastName () {
     return lastName;
     }
@@ -57,24 +44,16 @@ public class User {
         this.lastName = lastName;
     }
     
-    public String getLastNameProperCase () {
-        return lastNameProperCase;
-    }
-    
-    public void setLastNameProperCase () {
-        this.lastNameProperCase = lastName.substring(0,1).toUpperCase() + lastName.substring(1);
-    }
-    
-        public String getGender () {
-    return gender;
+    public String getGender () {
+        return gender;
     }
     
     public void setGender (String gender) {
         this.gender = gender;
     }
     
-        public String getEmail () {
-    return email;
+    public String getEmail () {
+        return email;
     }
     
     public void setEmail (String email) {
@@ -113,28 +92,20 @@ public class User {
         this.age = age;
     }
     
-    public void setDateOfBirthString(String dateOfBirthString){
-        this.dateOfBirthString = dateOfBirthString;
-    }
-    
-    public String getDateOfBirthString(){
-        return dateOfBirthString;
-    }
-    
-    public void setDateOfBirth(Date dateOfBirth){
+    public void setDateOfBirth(String dateOfBirth){
         this.dateOfBirth = dateOfBirth;
     }
     
-    public Date getDateOfBirth(){
+    public String getDateOfBirth(){
         return dateOfBirth;
     }
     
     @Override
     public String toString() {
         return "User Profile Information \n" 
-                    + "\n First name:" + firstNameProperCase
-                    + "\n Last name: " + lastNameProperCase
-                    + "\n Date of Birth: " + dateOfBirthString
+                    + "\n First name:" + firstName
+                    + "\n Last name: " + lastName
+                    + "\n Date of Birth: " + dateOfBirth
                     + "\n Gender: " + gender
                     + "\n Age: " + age
                     + "\n Phone: " + phoneFormatted

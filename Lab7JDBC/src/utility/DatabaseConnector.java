@@ -33,13 +33,13 @@ public class DatabaseConnector {
             // Create a connection
             Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, u1.getFirstNameProperCase());
-            stmt.setString(2, u1.getLastNameProperCase());
+            stmt.setString(1, u1.getFirstName());
+            stmt.setString(2, u1.getLastName());
             stmt.setString(3, u1.getGender());            
             stmt.setString(4, u1.getEmail());
             stmt.setString(5, u1.getPhoneUnformatted());
             stmt.setInt(6, u1.getAge());
-            stmt.setString(7, u1.getDateOfBirthString());            
+            stmt.setString(7, u1.getDateOfBirth());            
             stmt.setString(8, u1.getHobby());
             
             // After this query will look like:
@@ -75,7 +75,7 @@ public class DatabaseConnector {
                 u1.setEmail(rs.getString("email"));
                 u1.setPhoneFormatted(rs.getString("phone_number"));
                 u1.setAge(rs.getInt("age"));
-                u1.setDateOfBirthString(rs.getString("date_of_birth"));
+                u1.setDateOfBirth(rs.getString("date_of_birth"));
                 u1.setHobby(rs.getString("hobby"));
                 users.add(u1);
             }
@@ -98,13 +98,13 @@ public class DatabaseConnector {
         try{
             Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, updatedUser.getFirstNameProperCase());
-            stmt.setString(2, updatedUser.getLastNameProperCase());
+            stmt.setString(1, updatedUser.getFirstName());
+            stmt.setString(2, updatedUser.getLastName());
             stmt.setString(3, updatedUser.getGender());
             stmt.setString(4, updatedUser.getEmail());
             stmt.setString(5, updatedUser.getPhoneUnformatted());
             stmt.setInt(6, updatedUser.getAge());
-            stmt.setString(7, updatedUser.getDateOfBirthString());
+            stmt.setString(7, updatedUser.getDateOfBirth());
             stmt.setString(8, updatedUser.getHobby());
             stmt.setInt(9, oldUser.getUserId());
             
